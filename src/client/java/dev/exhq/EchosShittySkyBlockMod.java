@@ -15,14 +15,34 @@ import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class EchosShittySkyBlockMod implements ClientModInitializer {
+	public static final dev.exhq.ESSMConfig CONFIG = dev.exhq.ESSMConfig.createAndLoad();
 	public static final String MOD_ID = "essm";
+	public class RegexSubstringMatcher {
+
+		public static String findMatchingSubstring(String input, String regexPattern) {
+			Pattern pattern = Pattern.compile(regexPattern);
+			Matcher matcher = pattern.matcher(input);
+
+			if (matcher.find()) {
+				return matcher.group();
+			}
+
+			return "";
+		}
+	}
 	@Override
 	public void onInitializeClient() {
 
 		ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
 			if (overlay){
+				var noColor = message.getString().replaceAll("§[a-f0-9]", "");
+				//System.out.println(noColor);
 				var scoreboard = MinecraftClient.getInstance().world.getScoreboard();
 				var activeObjective = scoreboard.getObjectiveForSlot(Scoreboard.SIDEBAR_DISPLAY_SLOT_ID);
 				var actualScoreboardContent = new ArrayList<Text>();
@@ -35,9 +55,26 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 				}
 				Collections.reverse(actualScoreboardContent);
 				for (Text i : actualScoreboardContent) {
-					System.out.println(i.getString().replaceAll("§[^a-f0-9]", ""));
+					//System.out.println(i.getString().replaceAll("§[^a-f0-9]", ""));
 				}
-				System.out.println(message.getString());
+
+				var health = Objects.requireNonNull(RegexSubstringMatcher.findMatchingSubstring(noColor, "[0-9,]+/[0-9,]+❤")).replaceAll(",", "").replaceAll("❤", "").split("/");
+
+				var mana = Objects.requireNonNull(RegexSubstringMatcher.findMatchingSubstring(noColor, "[0-9,]+/[0-9,]+✎")).replaceAll(",", "").replaceAll("✎", "").split("/");
+
+				var usedMana = RegexSubstringMatcher.findMatchingSubstring(noColor, "(\\+|-)[1-9]+ Mana \\([^)]+\\)");
+
+				if (!usedMana.isEmpty()){
+					System.out.println("you used mana");
+					ManaUsage.showMana = true;
+					ManaUsage.ManaUsage = RegexSubstringMatcher.findMatchingSubstring(usedMana, "(\\+|-)[1-9]+");
+				} else {
+					ManaUsage.showMana = false;
+				}
+
+				Trolley.healthprogress = (Integer.parseInt(health[0]) * 128 ) / (Integer.parseInt(health[1]));
+
+				Trolley.manaprogress = (Integer.parseInt(mana[0]) * 128 ) / (Integer.parseInt(mana[1]));
 			}
 		});
 
@@ -48,20 +85,19 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 			if (player == null){
 				return;
 			}
-
-			Trolley.progress = (int)(player.getHealth()/player.getMaxHealth()*128);
 		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			dispatcher.register(literal("trolgessbar")
 					.then(argument("progress", IntegerArgumentType.integer(0,128)).executes(context -> {
 						int progress = IntegerArgumentType.getInteger(context, "progress");
-						Trolley.progress=progress;
+						Trolley.healthprogress =progress;
 						context.getSource().sendFeedback(Text.literal(":trolley:"));
 						return 0;
 					})));
 		});
 		HudRenderCallback.EVENT.register(new Trolley());
+		HudRenderCallback.EVENT.register(new ManaUsage());
 		HudRenderCallback.EVENT.register((maxtrixStack, tickDelta) -> {
 
 		});

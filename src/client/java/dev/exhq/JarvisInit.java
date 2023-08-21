@@ -18,4 +18,9 @@ public class JarvisInit implements JarvisPlugin {
     public @NotNull @Unmodifiable List<@NotNull JarvisHud> getAllHuds() {
         return ESSMhud.allhud;
     }
+
+    @Override
+    public void onHudEditorClosed() {
+        EchosShittySkyBlockMod.CONFIG.save();
+    }
 }

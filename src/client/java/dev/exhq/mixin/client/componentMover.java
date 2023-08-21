@@ -18,19 +18,19 @@ public class componentMover {
     @Shadow private int scaledHeight;
 
     @Inject(method = "renderHotbar", at = @At("HEAD"))
-    private void ResetHotbarPos(float tickDelta, DrawContext context, CallbackInfo ci){
+    private void resetHotbarPos(float tickDelta, DrawContext context, CallbackInfo ci){
         context.getMatrices().push();
         context.getMatrices().translate((float) -scaledWidth /2+91, -scaledHeight+22,0);
         ESSMhud.hotBarPos.applyTransformations(context.getMatrixStack());
     }
     @Inject(method = "renderHotbar", at = @At("TAIL"))
-    private void HotbarMove(float tickDelta, DrawContext context, CallbackInfo ci){
+    private void hotbarMove(float tickDelta, DrawContext context, CallbackInfo ci){
         context.getMatrices().pop();
     }
 
 
     @Inject(method = "renderExperienceBar", at = @At("HEAD"))
-    private void ResetXP(DrawContext context, int x, CallbackInfo ci){
+    private void resetXP(DrawContext context, int x, CallbackInfo ci){
         context.getMatrices().push();
         context.getMatrices().translate((float) -scaledWidth /2+91, -scaledHeight+28,0);
         ESSMhud.Xp.applyTransformations(context.getMatrixStack());
@@ -42,26 +42,41 @@ public class componentMover {
 
 
     @Inject(method = "renderHealthBar", at = @At("HEAD"))
-    private void ResetHeart(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
+    private void heartMove(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
         context.getMatrices().push();
         context.getMatrices().translate((float) -x, -y,0);
         ESSMhud.heartPos.applyTransformations(context.getMatrixStack());
     }
     @Inject(method = "renderHealthBar", at = @At("TAIL"))
-    private void HeartMove(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
+    private void resetHeart(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
         context.getMatrices().pop();
     }
 
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE_STRING",target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V",args = "ldc=food"))
-    private void RemoveHunger(DrawContext context, CallbackInfo ci){
+    private void removeHunger(DrawContext context, CallbackInfo ci){
         context.getMatrices().push();
         context.getMatrices().translate(10000,0,0);
     }
 
 
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE_STRING",target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V",args = "ldc=air"))
-    private void RestoreAir(DrawContext context, CallbackInfo ci){
+    private void restoreHunger(DrawContext context, CallbackInfo ci){
         context.getMatrices().pop();
     }
+
+
+    @Inject(method = "renderStatusBars", at = @At(value = "INVOKE_STRING",target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V",args = "ldc=armor"))
+    private void removeArmor(DrawContext context, CallbackInfo ci){
+        context.getMatrices().push();
+        context.getMatrices().translate(10000,0,0);
+    }
+
+
+    @Inject(method = "renderStatusBars", at = @At(value = "INVOKE_STRING",target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V",args = "ldc=health"))
+    private void restoreArmor(DrawContext context, CallbackInfo ci){
+        context.getMatrices().pop();
+    }
+
+
 
 }

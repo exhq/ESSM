@@ -28,10 +28,18 @@ public class ESSMhud implements JarvisHud, JarvisScalable {
         posdata.y = defaultY;
         posdata.scale = 1f;
     }
+    public ESSMhud(Text label, int width, int height, PosData posdata){
+
+        allhud.add(this);
+        this.label = label;
+        this.width = width;
+        this.height = height;
+        this.posdata = posdata;
+    }
     public static class PosData{
         double x;
         double y;
-        float scale;
+        float scale = 1f;
     }
 
 
@@ -70,9 +78,12 @@ public class ESSMhud implements JarvisHud, JarvisScalable {
         return this.height;
     }
     public static ESSMhud hotBarPos = new ESSMhud(Text.of("Hotbar"), 182,22, 1,1);
-    public static ESSMhud heartPos = new ESSMhud(Text.of("Heart"), 182,22, 1,1);
-    public static ESSMhud Xp = new ESSMhud(Text.of("XP"), 182,5, 1,1);
-    public static ESSMhud Trolley = new ESSMhud(Text.of("Trolley"), 128,128, 0,0);
+
+    public static ESSMhud heartPos = new ESSMhud(Text.of("Heart"), 182,22, EchosShittySkyBlockMod.CONFIG.Heart());
+    public static ESSMhud Xp = new ESSMhud(Text.of("XP"), 182,5, EchosShittySkyBlockMod.CONFIG.XP());
+    public static ESSMhud Trolley = new ESSMhud(Text.of("Health"), 128,16, EchosShittySkyBlockMod.CONFIG.Health());
+    public static ESSMhud Trolleymana = new ESSMhud(Text.of("Mana"), 128,16, EchosShittySkyBlockMod.CONFIG.Mana());
+    public static ESSMhud UsedMana = new ESSMhud(Text.of("UsedMana"), 128,16,  EchosShittySkyBlockMod.CONFIG.UsedMana());
 
 
 
