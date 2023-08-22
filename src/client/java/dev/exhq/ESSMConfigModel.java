@@ -8,7 +8,8 @@ import io.wispforest.owo.config.annotation.Modmenu;
 @Config(name = "ESSMConfig", wrapperName = "ESSMConfig")
 public class ESSMConfigModel {
 
-    public boolean VanillaHeartToggle = false;
+    public boolean DisableActionbar = false;
+    public boolean disableVanillaHealthbar = false;
 
     @ExcludeFromScreen
     public ESSMhud.PosData Heart = new ESSMhud.PosData();

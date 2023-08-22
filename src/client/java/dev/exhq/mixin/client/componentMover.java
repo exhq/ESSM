@@ -1,9 +1,12 @@
 package dev.exhq.mixin.client;
 
 import dev.exhq.ESSMhud;
+import dev.exhq.EchosShittySkyBlockMod;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +19,8 @@ public class componentMover {
     @Shadow private int scaledWidth;
 
     @Shadow private int scaledHeight;
+
+    @Shadow private @Nullable Text overlayMessage;
 
     @Inject(method = "renderHotbar", at = @At("HEAD"))
     private void resetHotbarPos(float tickDelta, DrawContext context, CallbackInfo ci){
@@ -45,8 +50,12 @@ public class componentMover {
     private void heartMove(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
         context.getMatrices().push();
         context.getMatrices().translate((float) -x, -y,0);
-        ESSMhud.heartPos.applyTransformations(context.getMatrixStack());
-    }
+        if(!EchosShittySkyBlockMod.CONFIG.disableVanillaHealthbar()){
+            ESSMhud.heartPos.applyTransformations(context.getMatrixStack());
+        } else {
+            context.getMatrices().translate(10000,0,0);
+        }
+        }
     @Inject(method = "renderHealthBar", at = @At("TAIL"))
     private void resetHeart(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo ci){
         context.getMatrices().pop();
@@ -77,6 +86,15 @@ public class componentMover {
         context.getMatrices().pop();
     }
 
+    @Inject(method = "setOverlayMessage", at = @At("TAIL"))
+    private void removeOverlay(Text message, boolean tinted, CallbackInfo ci){
+        if (EchosShittySkyBlockMod.CONFIG.DisableActionbar()){
+            this.overlayMessage = Text.of("");
+        } else {
+            return;
+        }
+
+    }
 
 
 }

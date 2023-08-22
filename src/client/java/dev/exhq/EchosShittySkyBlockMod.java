@@ -23,6 +23,10 @@ import java.util.regex.Pattern;
 public class EchosShittySkyBlockMod implements ClientModInitializer {
 	public static final dev.exhq.ESSMConfig CONFIG = dev.exhq.ESSMConfig.createAndLoad();
 	public static final String MOD_ID = "essm";
+	public static boolean shouldShowskill;
+	public static String PurseString;
+	public static String coinLogo;
+	public static String skillInfo;
 	public class RegexSubstringMatcher {
 
 		public static String findMatchingSubstring(String input, String regexPattern) {
@@ -42,7 +46,7 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 		ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
 			if (overlay){
 				var noColor = message.getString().replaceAll("§[a-f0-9]", "");
-				//System.out.println(noColor);
+
 				var scoreboard = MinecraftClient.getInstance().world.getScoreboard();
 				var activeObjective = scoreboard.getObjectiveForSlot(Scoreboard.SIDEBAR_DISPLAY_SLOT_ID);
 				var actualScoreboardContent = new ArrayList<Text>();
@@ -55,7 +59,10 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 				}
 				Collections.reverse(actualScoreboardContent);
 				for (Text i : actualScoreboardContent) {
-					//System.out.println(i.getString().replaceAll("§[^a-f0-9]", ""));
+					PurseString = RegexSubstringMatcher.findMatchingSubstring(i.getString().replaceAll("§.", "") , "Purse: ([0-9.,]+)");
+					if (!((PurseString) == "")){
+						coinLogo = PurseString.replaceAll("Purse: ", "")+" ⛃";
+					}
 				}
 
 				var health = Objects.requireNonNull(RegexSubstringMatcher.findMatchingSubstring(noColor, "[0-9,]+/[0-9,]+❤")).replaceAll(",", "").replaceAll("❤", "").split("/");
@@ -65,16 +72,30 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 				var usedMana = RegexSubstringMatcher.findMatchingSubstring(noColor, "(\\+|-)[1-9]+ Mana \\([^)]+\\)");
 
 				if (!usedMana.isEmpty()){
-					System.out.println("you used mana");
 					ManaUsage.showMana = true;
 					ManaUsage.ManaUsage = RegexSubstringMatcher.findMatchingSubstring(usedMana, "(\\+|-)[1-9]+");
 				} else {
 					ManaUsage.showMana = false;
 				}
 
+
+
+				var GetSkill = RegexSubstringMatcher.findMatchingSubstring(noColor, "\\([0-9,k]+/[0-9,k]+\\)");
+				if (!GetSkill.isEmpty()){
+					shouldShowskill = true;
+					var GetSkillPercentageRatio = (GetSkill.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll(",", "").replaceAll("k", "000"));
+					var Skillarray = GetSkillPercentageRatio.split("/");
+					Trolley.skillprogress = (Integer.parseInt(Skillarray[0]) * 128 ) / (Integer.parseInt(Skillarray[1]));
+					Trolley.skillprogressPercentage = (Integer.parseInt(Skillarray[0]) * 100 ) / (Integer.parseInt(Skillarray[1]));
+					Trolley.Skilltext = RegexSubstringMatcher.findMatchingSubstring(noColor, "\\+[0-9]+.?[0-9] [a-zA-Z]+");
+				} else {
+					shouldShowskill = false;
+				}
 				Trolley.healthprogress = (Integer.parseInt(health[0]) * 128 ) / (Integer.parseInt(health[1]));
 
 				Trolley.manaprogress = (Integer.parseInt(mana[0]) * 128 ) / (Integer.parseInt(mana[1]));
+
+
 			}
 		});
 
@@ -88,27 +109,27 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-			dispatcher.register(literal("trolgessbar")
-					.then(argument("progress", IntegerArgumentType.integer(0,128)).executes(context -> {
-						int progress = IntegerArgumentType.getInteger(context, "progress");
-						Trolley.healthprogress =progress;
-						context.getSource().sendFeedback(Text.literal(":trolley:"));
-						return 0;
-					})));
+			dispatcher.register(literal("trolgessbar").executes(context -> {
+				context.getSource().sendFeedback(Text.literal("this is an neu reference"));
+				MinecraftClient.getInstance().player.networkHandler.sendCommand("warp dungeon_hub");
+				return 0;
+			}));
 		});
 		HudRenderCallback.EVENT.register(new Trolley());
 		HudRenderCallback.EVENT.register(new ManaUsage());
+		HudRenderCallback.EVENT.register(new ScoreboardInfo());
 		HudRenderCallback.EVENT.register((maxtrixStack, tickDelta) -> {
 
 		});
 
 
 		ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {
-			return true;
+            return true;
 		});
 
-		ClientReceiveMessageEvents.MODIFY_GAME.register((message, overlay) -> {
-			return message;
-		});
+		//ClientReceiveMessageEvents.MODIFY_GAME.register((message, overlay) -> {
+		//	if(overlay) return message;
+		//	return
+		//});
 	}
 }
