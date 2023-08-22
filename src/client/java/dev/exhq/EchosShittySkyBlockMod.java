@@ -109,7 +109,7 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-			dispatcher.register(literal("trolgessbar").executes(context -> {
+			dispatcher.register(literal("dn").executes(context -> {
 				context.getSource().sendFeedback(Text.literal("this is an neu reference"));
 				MinecraftClient.getInstance().player.networkHandler.sendCommand("warp dungeon_hub");
 				return 0;
