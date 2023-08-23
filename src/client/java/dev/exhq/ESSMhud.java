@@ -84,7 +84,7 @@ public class ESSMhud implements JarvisHud, JarvisScalable {
     public static ESSMhud Trolley = new ESSMhud(Text.of("Health"), 128,16, EchosShittySkyBlockMod.CONFIG.Health());
     public static ESSMhud Trolleymana = new ESSMhud(Text.of("Mana"), 128,16, EchosShittySkyBlockMod.CONFIG.Mana());
     public static ESSMhud UsedMana = new ESSMhud(Text.of("UsedMana"), 128,16,  EchosShittySkyBlockMod.CONFIG.UsedMana());
-    public static ESSMhud PurseAmount = new ESSMhud(Text.of("UsedMana"), 128,16,  EchosShittySkyBlockMod.CONFIG.UsedMana());
+    public static ESSMhud PurseAmount = new ESSMhud(Text.of("PurseAmount"), 128,16,  EchosShittySkyBlockMod.CONFIG.PurseAmount());
     public static ESSMhud Skill = new ESSMhud(Text.of("Skill"), 128,16, 0,0);
 
 

@@ -19,7 +19,7 @@ public class ESSMConfigModel {
 
     public ESSMhud.PosData Mana = new ESSMhud.PosData();
     public ESSMhud.PosData UsedMana = new ESSMhud.PosData();
-
+    public ESSMhud.PosData PurseAmount = new ESSMhud.PosData();
 
 
 }

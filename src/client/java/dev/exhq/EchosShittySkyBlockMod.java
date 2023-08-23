@@ -13,6 +13,10 @@ import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
@@ -25,6 +29,7 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 	public static final String MOD_ID = "essm";
 	public static boolean shouldShowskill;
 	public static String PurseString;
+	public static boolean killDante;
 	public static String coinLogo;
 	public static String skillInfo;
 	public class RegexSubstringMatcher {
@@ -115,21 +120,31 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 				return 0;
 			}));
 		});
+
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			dispatcher.register(literal("killdante").executes(context -> {
+				killDante = !killDante;
+                return 0;
+            }));
+		});
+
 		HudRenderCallback.EVENT.register(new Trolley());
 		HudRenderCallback.EVENT.register(new ManaUsage());
 		HudRenderCallback.EVENT.register(new ScoreboardInfo());
-		HudRenderCallback.EVENT.register((maxtrixStack, tickDelta) -> {
-
-		});
 
 
 		ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {
             return true;
 		});
 
-		//ClientReceiveMessageEvents.MODIFY_GAME.register((message, overlay) -> {
-		//	if(overlay) return message;
-		//	return
-		//});
+		ClientReceiveMessageEvents.MODIFY_GAME.register((message, overlay) -> {
+			if(overlay||!killDante) return message;
+			var words = message.getString().split(" ");
+			var newMessage = "";
+			for (String word : words) {
+				newMessage += word + "ussy ";
+			}
+			return Text.of(newMessage);
+		});
 	}
 }
