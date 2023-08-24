@@ -8,6 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 public class ScoreboardInfo implements HudRenderCallback {
     @Override
     public void onHudRender(DrawContext drawContext, float tickDelta) {
+        if(false)
         drawContext.fill(0, (MinecraftClient.getInstance().getWindow().getScaledHeight()) -50,
                 MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight(), -1);
 
