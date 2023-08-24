@@ -2,10 +2,6 @@
 	"required": true,
 	"package": "dev.exhq.mixin.client",
 	"compatibilityLevel": "JAVA_17",
-	"client": [
-		"componentMover",
-		"TitleScreenMixin"
-	],
 	"injectors": {
 		"defaultRequire": 1
 	}
