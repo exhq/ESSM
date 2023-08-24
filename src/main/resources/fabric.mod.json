@@ -3,15 +3,14 @@
 	"id": "essm",
 	"version": "${version}",
 	"name": "echo's shitty skyblock mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "yet another mod for the biggest MMORPG in minecraft",
 	"authors": [
-		"Me!"
+		"echo"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/exhq/ESSM"
 	},
-	"license": "CC0-1.0",
+	"license": "WTFPL",
 	"icon": "assets/essm/icon.png",
 	"environment": "*",
 	"entrypoints": {
