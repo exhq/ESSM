@@ -15,9 +15,6 @@
 	"icon": "assets/essm/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"dev.exhq.ExampleMod"
-		],
 		"client": [
           "dev.exhq.EchosShittySkyBlockMod"
 		],
@@ -27,11 +24,7 @@
 	},
 
 	"mixins": [
-		"essm.mixins.json",
-		{
-			"config": "essm.client.mixins.json",
-			"environment": "client"
-		}
+		"essm.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.14.22",

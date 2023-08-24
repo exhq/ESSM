@@ -17,14 +17,6 @@ repositories {
 }
 
 loom {
-    splitEnvironmentSourceSets()
-
-	mods {
-		"essm" {
-			sourceSet sourceSets.main
-			sourceSet sourceSets.client
-		}
-	}
 
 }
 
