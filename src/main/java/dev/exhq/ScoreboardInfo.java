@@ -5,9 +5,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 
 
-public class ScoreboardInfo implements HudRenderCallback {
+public class ScoreboardInfo implements HudRenderCallbackVanilla {
     @Override
-    public void onHudRender(DrawContext drawContext, float tickDelta) {
+    public void renderHudElements(DrawContext drawContext, float tickDelta) {
         if(false)
         drawContext.fill(0, (MinecraftClient.getInstance().getWindow().getScaledHeight()) -50,
                 MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight(), -1);

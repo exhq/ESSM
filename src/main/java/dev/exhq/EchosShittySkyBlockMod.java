@@ -129,9 +129,9 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
             }));
 		});
 
-		HudRenderCallback.EVENT.register(new Trolley());
-		HudRenderCallback.EVENT.register(new ManaUsage());
-		HudRenderCallback.EVENT.register(new ScoreboardInfo());
+		HudRenderCallbackVanilla.EVENT.register(new Trolley());
+		HudRenderCallbackVanilla.EVENT.register(new ManaUsage());
+		HudRenderCallbackVanilla.EVENT.register(new ScoreboardInfo());
 
 
 		ClientReceiveMessageEvents.ALLOW_GAME.register((message, overlay) -> {

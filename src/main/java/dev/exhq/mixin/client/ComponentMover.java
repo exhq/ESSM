@@ -2,6 +2,7 @@ package dev.exhq.mixin.client;
 
 import dev.exhq.ESSMhud;
 import dev.exhq.EchosShittySkyBlockMod;
+import dev.exhq.HudRenderCallbackVanilla;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,6 +62,12 @@ public class ComponentMover {
         } else {
             context.getMatrices().translate(10000, 0, 0);
         }
+    }
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getSleepTimer()I"))
+    public void renderOurHuds(DrawContext context, float tickDelta, CallbackInfo ci) {
+        HudRenderCallbackVanilla.EVENT.invoker()
+                .renderHudElements(context, tickDelta);
     }
 
     @Inject(method = "renderHealthBar", at = @At("TAIL"))

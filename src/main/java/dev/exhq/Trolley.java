@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
-public class Trolley implements HudRenderCallback {
+public class Trolley implements HudRenderCallbackVanilla {
     private static final Identifier TROLLEYEMPTY = new Identifier(EchosShittySkyBlockMod.MOD_ID, "textures/trolley/empty.png");
     private static final Identifier TROLLEY = new Identifier(EchosShittySkyBlockMod.MOD_ID, "textures/trolley/heart.png");
 
@@ -22,7 +22,7 @@ public class Trolley implements HudRenderCallback {
     public static int skillprogressPercentage = 100;
     public static String Skilltext = "";
     @Override
-    public void onHudRender(DrawContext drawContext, float tickDelta) {
+    public void renderHudElements(DrawContext drawContext, float tickDelta) {
         int x = 0;
         int y = 0;
         drawContext.getMatrices().push();
