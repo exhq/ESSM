@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,9 +27,9 @@ public class ComponentMover {
     private @Nullable Text overlayMessage;
 
     @Inject(method = "renderHotbar", at = @At("HEAD"))
-    private void resetHotbarPos(float tickDelta, DrawContext context, CallbackInfo ci){
+    private void resetHotbarPos(float tickDelta, DrawContext context, CallbackInfo ci) {
         context.getMatrices().push();
-        context.getMatrices().translate((float) -scaledWidth /2+91, -scaledHeight+22,0);
+        context.getMatrices().translate((float) -scaledWidth / 2 + 91, -scaledHeight + 22, 0);
         ESSMhud.hotBarPos.applyTransformations(context.getMatrices());
     }
 
@@ -67,16 +68,23 @@ public class ComponentMover {
         context.getMatrices().pop();
     }
 
+    @Unique
+    boolean didPushForFood = false;
+
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=food"))
     private void removeHunger(DrawContext context, CallbackInfo ci) {
         context.getMatrices().push();
         context.getMatrices().translate(10000, 0, 0);
+        didPushForFood = true;
     }
 
 
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=air"))
     private void restoreHunger(DrawContext context, CallbackInfo ci) {
-        context.getMatrices().pop();
+        if (didPushForFood) {
+            context.getMatrices().pop();
+            didPushForFood = false;
+        }
     }
 
 
