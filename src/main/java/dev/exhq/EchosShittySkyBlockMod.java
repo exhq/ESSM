@@ -26,8 +26,8 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 	public static String PurseString;
 	public static boolean killDante;
 	public static String coinLogo;
-	public static String skillInfo;
-	public class RegexSubstringMatcher {
+
+	public static class RegexSubstringMatcher {
 
 		public static String findMatchingSubstring(String input, String regexPattern) {
 			Pattern pattern = Pattern.compile(regexPattern);
@@ -148,11 +148,11 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 		ClientReceiveMessageEvents.MODIFY_GAME.register((message, overlay) -> {
 			if(overlay||!killDante) return message;
 			var words = message.getString().split(" ");
-			var newMessage = "";
+			StringBuilder newMessage = new StringBuilder();
 			for (String word : words) {
-				newMessage += word + "ussy ";
+				newMessage.append(word).append("ussy ");
 			}
-			return Text.of(newMessage);
+			return Text.of(newMessage.toString());
 		});
 	}
 }
