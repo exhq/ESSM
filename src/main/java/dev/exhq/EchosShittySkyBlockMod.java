@@ -1,28 +1,22 @@
 package dev.exhq;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 
 public class EchosShittySkyBlockMod implements ClientModInitializer {
@@ -48,7 +42,6 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 	}
 	@Override
 	public void onInitializeClient() {
-
 		ClientReceiveMessageEvents.GAME.register((message, overlay) -> {
 			if (overlay){
 				var noColor = message.getString().replaceAll("§[a-f0-9]", "");
@@ -123,11 +116,25 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 		});
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			dispatcher.register(literal("givemeshit").executes(context -> {
+				MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(LocrawParser.data.gametype));
+				MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(LocrawParser.data.map));
+				MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(LocrawParser.data.lobbyname));
+				MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(LocrawParser.data.mode));
+				MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(LocrawParser.data.server));
+
+				return 0;
+			}));
+		});
+
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			dispatcher.register(literal("killdante").executes(context -> {
 				killDante = !killDante;
                 return 0;
             }));
 		});
+
+		ClientReceiveMessageEvents.ALLOW_GAME.register(new LocrawParser());
 
 		HudRenderCallbackVanilla.EVENT.register(new Trolley());
 		HudRenderCallbackVanilla.EVENT.register(new ManaUsage());
