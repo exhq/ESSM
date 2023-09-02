@@ -1,0 +1,5 @@
+{
+  "text.config.ESSMConfig.title": "ESSM",
+  "text.config.ESSMConfig.option.DisableActionbar": "Disable Actionbar",
+  "text.config.ESSMConfig.option.disableVanillaHealthbar": "Disable Vanilla Hearts"
+}
