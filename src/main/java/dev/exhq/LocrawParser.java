@@ -13,7 +13,6 @@ public class LocrawParser implements ClientReceiveMessageEvents.AllowGame {
             String jsonString = message.getString();
             Gson gson = new Gson();
             data = gson.fromJson(jsonString, LocrawData.class);
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("locraw detected"));
             return false;
         }
         return true;

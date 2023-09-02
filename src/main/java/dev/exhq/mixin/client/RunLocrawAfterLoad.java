@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class RunLocrawAfterLoad {
     @Inject(method = "close", at = @At("HEAD"))
     public void onClose(CallbackInfo ci) {
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("while the screen was loading, i was having gay sex with your mother"));
+        MinecraftClient.getInstance().player.networkHandler.sendCommand("locraw");
     }
 }
