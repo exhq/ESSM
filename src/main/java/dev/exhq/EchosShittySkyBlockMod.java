@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
@@ -51,7 +52,7 @@ public class EchosShittySkyBlockMod implements ClientModInitializer {
 				var noColor = message.getString().replaceAll("§[a-f0-9]", "");
 
 				var scoreboard = MinecraftClient.getInstance().world.getScoreboard();
-				var activeObjective = scoreboard.getObjectiveForSlot(Scoreboard.SIDEBAR_DISPLAY_SLOT_ID);
+				var activeObjective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR);
 				var actualScoreboardContent = new ArrayList<Text>();
 				if (activeObjective == null){
 					return;
